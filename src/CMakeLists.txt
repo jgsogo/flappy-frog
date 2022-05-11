@@ -28,9 +28,18 @@ install(TARGETS mygame
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
 
-file(GLOB ASSETS "${CMAKE_CURRENT_SOURCE_DIR}/../assets/*.png")
-     
+install(FILES
+#        ${MAGNUM_EMSCRIPTENAPPLICATION_JS}
+#        ${CMAKE_CURRENT_SOURCE_DIR}/resources/favicon.ico
+        $<TARGET_FILE_DIR:mygame>/mygame.js
+        $<TARGET_FILE_DIR:mygame>/mygame.wasm
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+
+file(GLOB ASSETS "${CMAKE_SOURCE_DIR}/assets/*.png")
+
+include(${CMAKE_SOURCE_DIR}/cmake/emscripten.cmake)
 foreach(asset ${ASSETS})
+        file(RELATIVE_PATH assetRelativePath ${CMAKE_SOURCE_DIR}/assets/ ${asset})
         add_custom_command(TARGET mygame POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 ${asset}
@@ -38,5 +47,7 @@ foreach(asset ${ASSETS})
 
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 ${asset}
-                ${CMAKE_INSTALL_PREFIX}/bin)
+                ${CMAKE_INSTALL_PREFIX}/bin/${assetRelativePath})
+
+        emscripten_embed_file(mygame ${asset} ${assetRelativePath})
 endforeach(asset)

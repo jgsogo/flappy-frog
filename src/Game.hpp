@@ -51,7 +51,7 @@ public:
     const b2Vec2 initFrogPos{WORLD_WIDTH/3.0,0.0};
     const b2Vec2 initPipePos{2*WORLD_WIDTH,0.0};
 
-private:
+public:
     World world{};
     std::unique_ptr<Frog> frog{std::make_unique<Frog>(initFrogPos, world)};
     std::unique_ptr<Pipe> pipe{std::make_unique<Pipe>(initPipePos, world)};

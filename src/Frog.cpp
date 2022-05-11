@@ -40,7 +40,7 @@ SDL_Texture* Frog::initTexture(const std::string& name, SDL_Renderer *renderer) 
     SDL_Surface* tmp_image;
     tmp_image = IMG_Load(name.c_str());
     if(!tmp_image) {
-        std::cout << "Error loading texture" << std::endl;
+        std::cout << "Error loading texture: " << IMG_GetError() << std::endl;
         exit(1);
     }
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, tmp_image);
